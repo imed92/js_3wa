@@ -1,10 +1,32 @@
+// Je vais placer un écouteur d'évenement au moment ou le DOM sera chargé
+document.addEventListener("DOMContentLoaded", init());
+
+
+// La fonction init c'est la fonction qui va s'exécuter au moment ou le DOM sera chargé
+function init() {
+    // Ici on récupère la balise <body>
+    const body = document.querySelector("body");
+
+    // On récupère le thème sauvegardé
+    const theme = localStorage.getItem("theme");
+
+    // Ici on pose une condition qui vérifie si theme est égal à "theme-dark", alors on ajout la 
+    // classe theme-dark à la balise <body>, ce qui donnera <body class="theme_dark">
+    if (theme === "theme-dark"){
+        body.classList.add("theme-dark");
+    }
+    // Sinon, ça veut dire que le theme n'est pas dark (donc clair), donc on a juste à retirer le 
+    // "theme-dark" de la balise <body> 
+    else {
+        body.classList.remove("theme-dark");
+    }
+}
+
 // On sait qu'ici on veut pouvoir au clic du bouton "lumière", on veut pouvoir changer la couleur du thème
 
 // 1ère étape : On récupère le bouton qui permet de switcher la couleur du thème
 // querySelector() permet de récupérer UN ELEMENT (UN SEUL)
 const buttonSwitch = document.querySelector("#theme-switch");
-
-console.log(buttonSwitch); // On check si on a bien récupéré le bon bouton
 
 // Une fois que le bouton a été récupéré, on va y placer un écouteur d'évènement
 // Cet écouteur d'évènement va écouter l'evenement "click" sur le bouton buttonSwitch
@@ -16,7 +38,6 @@ buttonSwitch.addEventListener("click", changeTheme);
 // Ci dessous, la fonction qui va s'exécuter au clic du bouton buttonSwitch
 function changeTheme()
 {
-    console.log("On va changer le thème du site !")
     // Pour changer le theme du site, on va ajouter la classe theme-dark à la balise <body>
     // Je vais d'abord récupérer la balise <body>
     const body = document.querySelector("body");
@@ -25,15 +46,19 @@ function changeTheme()
     // si la classe n'est pas là, la classe theme-dark se rajoute 
     // si la classe est là, la classe theme-dark se retire
     body.classList.toggle("theme-dark");
-    // Le fait d'utiliser toggle, c'est comme si on avait fait comme ça :
-    // si la  balise body contient la class="theme-dark"
-    // if(body.classList.contains("theme-dark")){
-    //     //alors supprimer la class
-    //     body.classList.remove("theme-dark");
-    // }else {
-    //     //sinon, ça voudrait dire que theme-dark n'est pas dans la balise body donc tu l'ajoute
-    //     body.classList.add("theme-dark");
-    // }
+
+    // Je rentre dans le if si la classe theme-dark est bien dans la balise <body>
+    // pour faire simple, je vérifie si dans <body> il y a class="theme-dark"
+    // En gros je vérifie si il y a <body class="theme-dark">
+    if (body.classList.contains("theme-dark")) { // Si oui, on rentre dans le if ...
+        console.log("Dark mode"); // Simple console.log()
+        // On associe à la clé "theme" la valeur "theme-dark"
+        localStorage.setItem('theme', 'theme-dark'); // On ajoute au localStorage le theme-dark
+    } else { // Sinon ca veut dire qu'on est en mode clair
+        console.log("Light mode"); // Simple console.log()
+         // On associe à la clé "theme" la valeur "theme-light"
+        localStorage.setItem('theme', 'theme-light'); // On ajoute au localStorage le theme-light
+    }
 }
 
 // On récupère la liste des 3 boutons (green, blue et red) et on les stock dans buttons
